@@ -1,0 +1,14 @@
+---
+- name: Find the next available vmid
+    shell: pvesh get /cluster/nextid
+    register: next_vmid
+    delegate_to: "{{ proxmox_host }}"
+
+# qm importovf 400 Greg-rocky8-to-9-conversion/Greg-rocky8-to-9-conversion.ovf local-lvm
+- name: Run qm import with the new next_vmid
+  # ansible.builtin.shell: "{{ ovftool_path }}/ovftool --noSSLVerify vi://{{ vmware_username }}:{{ vmware_password }}@{{ vmware_host }}:443/{{ vmware_datacenter }}/vm/{{ vmware_directory }}/{{ hostvars[inventory_hostname].config.name }} ."
+  ansible.builtin.shell: "qm importovf {{ next_vmid.stdout }} {{ hostvars[item].config.name }}/{{ hostvars[item].config.name }}.ovf {{ proxmox_storage }}"
+  args:
+    chdir: "{{ proxmox_migration_dir }}/"
+  delegate_to: "{{ proxmox_host }}"
+  no_log: true
