@@ -1,0 +1,11 @@
+---
+- name: Preconfigure the VMWare hosts for migration
+  hosts: all
+  gather_facts: false
+  vars:
+  tasks:
+    - name: Connect to hosts and add virtio drivers to boot(using virtio in proxmox)
+      ansible.builtin.shell: 'dracut --add-drivers "virtio_scsi virtio_pci" -f -v /boot/initramfs-`uname -r`.img `uname -r`'
+      register: driver_install
+#      dracut: *** Creating initramfs image file '/boot/initramfs-5.14.0-162.23.1.el9_1.x86_64.img' done ***
+#      failed_when: based on the above
