@@ -1,8 +1,8 @@
 ---
 - name: Find the next available vmid
-    shell: pvesh get /cluster/nextid
-    register: next_vmid
-    delegate_to: "{{ proxmox_host }}"
+  ansible.builtin.shell: pvesh get /cluster/nextid
+  register: next_vmid
+  delegate_to: "{{ proxmox_host }}"
 
 # qm importovf 400 Greg-rocky8-to-9-conversion/Greg-rocky8-to-9-conversion.ovf local-lvm
 - name: Run qm import with the new next_vmid
