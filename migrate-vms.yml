@@ -89,6 +89,8 @@
             scsihw: virtio-scsi-pci
             cpu: x86-64-v2-AES
             bios: ovmf
+            net:
+              net0: 'virtio,bridge=vmbr0,firewall=1'
             efidisk0:
               storage: "{{ proxmox_storage }}"
               format: raw
