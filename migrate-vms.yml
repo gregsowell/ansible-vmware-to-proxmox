@@ -96,9 +96,10 @@
               pre_enrolled_keys: false	
           delegate_to: "{{ localhost }}"
 
-          - name: Start VM
-            community.general.proxmox_kvm:
-              <<: *proxmox_auth
-              name: "{{ hostvars[inventory_hostname].config.name }}"
-              node: proxmox
-              state: started
+        - name: Start VM
+          community.general.proxmox_kvm:
+            <<: *proxmox_auth
+            name: "{{ hostvars[inventory_hostname].config.name }}"
+            node: proxmox
+            state: started
+          delegate_to: "{{ localhost }}"
