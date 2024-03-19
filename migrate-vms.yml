@@ -43,6 +43,7 @@
         state: directory
         mode: '0755'
       delegate_to: "{{ proxmox_host }}"
+      run_once: true
 
     - name: Check for each host and see if they already have an export folder created
       stat:
