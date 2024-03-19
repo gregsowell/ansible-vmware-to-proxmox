@@ -10,4 +10,5 @@
 #      dracut: *** Creating initramfs image file '/boot/initramfs-5.14.0-162.23.1.el9_1.x86_64.img' done ***
 #      failed_when: based on the above
 
-# use vmware playbooks to stop the VMs next
+    - name: Shutdown the host
+      community.general.shutdown:
