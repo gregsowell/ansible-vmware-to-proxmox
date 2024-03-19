@@ -94,6 +94,7 @@
               format: raw
               efitype: 4m
               pre_enrolled_keys: false	
+            update: true
           delegate_to: "{{ localhost }}"
 
         - name: Start VM
