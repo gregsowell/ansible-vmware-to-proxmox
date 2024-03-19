@@ -90,7 +90,7 @@
             cpu: x86-64-v2-AES
             bios: ovmf
             efidisk0:
-              storage: VMs_LVM_thin
+              storage: "{{ proxmox_storage }}"
               format: raw
               efitype: 4m
               pre_enrolled_keys: false	
