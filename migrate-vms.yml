@@ -35,6 +35,7 @@
         name: "{{ proxmox_host }}"
         # groups: just_created
         ansible_host: "{{ proxmox_host }}"
+      run_once: true
 
     - name: Create the proxmox migration directory if it doesn't exist
       ansible.builtin.file:
