@@ -19,10 +19,12 @@
     vmware_directory: Greg/ciq
 
     #VMware username
-    vmware_username: administrator
+    # vmware_username: administrator
+    vmware_username: "{{ gen1_user }}"
 
     #VMware password
-    vmware_password: test
+    # vmware_password: test
+    vmware_password: "{{ gen1_pword }}"
 
     #Proxmox migration folder
     proxmox_migration_dir: /root/migration
