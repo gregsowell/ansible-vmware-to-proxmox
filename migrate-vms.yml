@@ -55,17 +55,17 @@
       delegate_to: "{{ proxmox_host }}"
 
     - name: Block for exporting/importing hosts
-      block:
       when: inventory_hostname != proxmox_host and ( not directory_status.stat.exists or not directory_status.stat.isdir )
-      - name: Run ovftool to export vm from vmware to proxmox server if folder isn't already there
-        ansible.builtin.shell: "{{ ovftool_path }}/ovftool --noSSLVerify vi://{{ vmware_username }}:{{ vmware_password }}@{{ vmware_host }}:443/{{ vmware_datacenter }}/vm/{{ vmware_directory }}/{{ hostvars[inventory_hostname].config.name }} ."
-        args:
-          chdir: "{{ proxmox_migration_dir }}/"
-        delegate_to: "{{ proxmox_host }}"
-        no_log: true
+      block:
+        - name: Run ovftool to export vm from vmware to proxmox server if folder isn't already there
+          ansible.builtin.shell: "{{ ovftool_path }}/ovftool --noSSLVerify vi://{{ vmware_username }}:{{ vmware_password }}@{{ vmware_host }}:443/{{ vmware_datacenter }}/vm/{{ vmware_directory }}/{{ hostvars[inventory_hostname].config.name }} ."
+          args:
+            chdir: "{{ proxmox_migration_dir }}/"
+          delegate_to: "{{ proxmox_host }}"
+          no_log: true
 
-      - name: Call task file to provision new proxmox vm.  Loop over hosts in play
-        ansible.builtin.include_tasks:
-          file: import-ovf.yml
-        run_once: true
-        loop: "{{ play_hosts }}"
+        - name: Call task file to provision new proxmox vm.  Loop over hosts in play
+          ansible.builtin.include_tasks:
+            file: import-ovf.yml
+          run_once: true
+          loop: "{{ play_hosts }}"
