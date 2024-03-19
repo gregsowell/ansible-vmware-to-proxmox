@@ -95,7 +95,7 @@
               efitype: 4m
               pre_enrolled_keys: false	
             update: true
-          delegate_to: "{{ localhost }}"
+          delegate_to: localhost
 
         - name: Start VM
           community.general.proxmox_kvm:
@@ -103,4 +103,4 @@
             name: "{{ hostvars[inventory_hostname].config.name }}"
             node: proxmox
             state: started
-          delegate_to: "{{ localhost }}"
+          delegate_to: localhost
