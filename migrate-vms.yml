@@ -1,0 +1,54 @@
+---
+- name: Use ovftool to pull vms from vmware and import into proxmox
+  hosts: all
+  gather_facts: false
+  vars:
+    #Full path to ovftool
+    ovftool_path: /root/ovftool/
+
+    #Hostname or IP of vmware vcenter
+    vmware_host: 10.0.2.10
+
+    #Hostname or IP of proxmox
+    proxmox_host: proxmox.gregsowell.com
+
+    #Datacenter the VMs are in
+    vmware_datacenter: MNS
+
+    #Directory path to vms
+    vmware_directory: Greg/ciq
+
+    #VMware username
+    vmware_username: administrator
+
+    #VMware password
+    vmware_password: test
+
+    #Proxmox migration folder
+    proxmox_migration_dir: /root/migration
+
+  tasks:
+    - name: Add proxmox host to inventory
+      ansible.builtin.add_host:
+        name: "{{ proxmox_host }}"
+        # groups: just_created
+        ansible_host: "{{ proxmox_host }}"
+
+    - name: Create the proxmox migration directory if it doesn't exist
+      ansible.builtin.file:
+        path: "{{ proxmox_migration_dir }}"
+        state: directory
+        mode: '0755'
+      delegate_to: "{{ proxmox_host }}"
+
+    - name: Check for each host and see if they already have an export folder created
+      stat:
+        path: "{{ proxmox_migration_dir }}/{{ hostvars[inventory_hostname].config.name }}"
+      register: directory_status
+      delegate_to: "{{ proxmox_host }}"
+
+    - name: Run ovftool to export vm from vmware to proxmox server if folder isn't already there
+      when: inventory_hostname != proxmox_host and ( not directory_status.stat.exists or not directory_status.stat.isdir )
+      ansible.builtin.shell: "ovftool --noSSLVerify vi://{{ vmware_username }}:{{ vmware_password }}@{{ vmware_host }}:443/{{ vmware_datacenter }}/vm/{{ vmware_directory }}/{{ hostvars[inventory_hostname].config.name }} ."
+      delegate_to: "{{ proxmox_host }}"
+      no_log: true
