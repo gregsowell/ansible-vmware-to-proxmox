@@ -117,4 +117,4 @@
             node: proxmox
             state: started
           delegate_to: localhost
-          ignore_errors: true
+          # ignore_errors: true
