@@ -90,7 +90,7 @@
             cpu: x86-64-v2-AES
             bios: ovmf
             net:
-              #net0: 'virtio,bridge=vmbr0,firewall=1'
+              net0: 'virtio,bridge=vmbr0,firewall=1'
             #   net0:
             #     bridge: vmbr0
             #     firewall: 1
