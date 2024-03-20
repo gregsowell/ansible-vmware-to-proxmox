@@ -12,4 +12,3 @@
   args:
     chdir: "{{ proxmox_migration_dir }}/"
   delegate_to: "{{ proxmox_host }}"
-  no_log: true

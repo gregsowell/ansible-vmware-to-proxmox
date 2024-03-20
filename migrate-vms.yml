@@ -89,19 +89,25 @@
             scsihw: virtio-scsi-pci
             cpu: x86-64-v2-AES
             bios: ovmf
-            net:
-              #net0: 'virtio,bridge=vmbr0,firewall=1'
-              net0:
-                bridge: vmbr0
-                firewall: 1
-                model: virtio
+            # net:
+            #   #net0: 'virtio,bridge=vmbr0,firewall=1'
+            #   net0:
+            #     bridge: vmbr0
+            #     firewall: 1
+            #     model: virtio
             efidisk0:
               storage: "{{ proxmox_storage }}"
               format: raw
               efitype: 4m
               pre_enrolled_keys: false	
             update: true
+          register: vm_update
           delegate_to: localhost
+
+        - name: Run qm create network interface
+          when: inventory_hostname != proxmox_host
+          ansible.builtin.shell: "qm set {{ vm_update.vmid }} --net0 virtio,bridge=vmbr0,firewall=1"
+          delegate_to: "{{ proxmox_host }}"
 
         - name: Start VM
           community.general.proxmox_kvm:
